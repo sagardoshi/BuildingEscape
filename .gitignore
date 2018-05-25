@@ -1,0 +1,16 @@
+########################
+# Unreal Derived Files #
+########################
+
+*/Build
+*/Binaries
+*/DerivedDataCache
+*/Intermediate
+*/Saved
+Content/StarterContent/
+
+###############
+# Xcode Files #
+###############
+
+*.xcworkspace

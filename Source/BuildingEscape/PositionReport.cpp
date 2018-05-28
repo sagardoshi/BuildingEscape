@@ -1,12 +1,14 @@
 #include "PositionReport.h"
 
+#include "BuildingEscape.h"
+#include "Runtime/Engine/Classes/GameFramework/Actor.h"
+
 
 // Sets default values for this component's properties
 UPositionReport::UPositionReport()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-    bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
 
 }
@@ -17,7 +19,10 @@ void UPositionReport::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("PositionReport is ready."));
+    
+    FString ObjectName = GetOwner()->GetName();
+    FString ObjectPos = GetOwner()->GetActorLocation().ToString();
+	UE_LOG(LogTemp, Warning, TEXT("%s at %s"), *ObjectName, *ObjectPos);
 	
 }
 

@@ -21,12 +21,19 @@ void UOpenDoor::BeginPlay()
 
 	// From scene, saves pointer to player's current body into ActorThatOpens
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+
+	// Establishes owner and default door angles at start
+	Owner = GetOwner();
+	CloseAngle = Owner->GetActorRotation().Yaw;
+	OpenAngle = CloseAngle + AngleAjar;
 }
 
 void UOpenDoor::OpenDoor() {
-	AActor* Owner = GetOwner();
-	FRotator opened = FRotator(0.f, -60.f, 0.f);
-	Owner->SetActorRotation(opened);
+	Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
+}
+
+void UOpenDoor::CloseDoor() {
+	Owner->SetActorRotation(FRotator(0.f, CloseAngle, 0.f));
 }
 
 
@@ -35,8 +42,17 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// Poll trigger volume every frame; // If ActorThatOpens is in volume, then
+	float Now = GetWorld()->GetTimeSeconds();
+
+
+	// If PressurePlate pressed, then open
 	if (PressurePlate && PressurePlate->IsOverlappingActor(ActorThatOpens)) {
 		OpenDoor();
+		LastDoorOpenTime = Now;
+	}
+
+	// If PressurePlate left, then close
+	if (Now > (LastDoorOpenTime + DoorCloseDelay)) {
+		CloseDoor();
 	}
 }

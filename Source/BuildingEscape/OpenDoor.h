@@ -22,6 +22,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void OpenDoor();
+	void CloseDoor();
 
 protected:
 	// Called when the game starts
@@ -30,13 +31,22 @@ protected:
 private:
 	// Applying macros to private attributes
 
-	UPROPERTY(VisibleAnywhere)
-	float OpenAngle = 90.0f;
+	UPROPERTY(EditAnywhere)
+	float AngleAjar = -90.0f;
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate;
 
+	UPROPERTY(EditAnywhere)
+	float DoorCloseDelay = 0.125f;
+
+	// Non-macro attributes
+	float OpenAngle;
+	float CloseAngle;
+	float LastDoorOpenTime;
+
 	AActor* ActorThatOpens; // Remember: Pawn is child of Actor
+	AActor* Owner; // Owning door
 
 
 };

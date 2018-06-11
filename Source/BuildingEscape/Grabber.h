@@ -13,7 +13,7 @@ class BUILDINGESCAPE_API UGrabber : public UActorComponent
 	GENERATED_BODY()
 
 private:
-	float Reach = 200.f;
+	float Reach = 100.f;
 
 protected:
 	// Called when the game starts

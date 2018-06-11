@@ -4,6 +4,7 @@
 #include "BuildingEscape.h"
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
+#include "CollisionQueryParams.h"
 
 #define OUT
 
@@ -35,7 +36,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// Get player viewpoint this tick
+	/// Get player viewpoint this tick
 	FVector PlayerViewPointLocation;
 	FRotator PlayerViewPointRotation;
 
@@ -49,12 +50,12 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	// 	*PlayerViewPointRotation.ToString()
 	// );
 
-	// Draw a red trace in the world to visualise
+	/// Draw a red trace in the world to visualise
 	FVector LineTraceDirection = PlayerViewPointRotation.Vector();
 	FVector LineTraceEnd = PlayerViewPointLocation +
 						  (LineTraceDirection * Reach);
 
-	// Raycast to reach distance
+	/// Cast red line in view direction
 	DrawDebugLine(
 		GetWorld(),
 		PlayerViewPointLocation,
@@ -65,6 +66,27 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		0.f,
 		10.f
 	);
+
+	/// Setup query parameters
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+
+	/// Raycast to reach distance
+	FHitResult Hit;
+	bool hitFound = GetWorld()->LineTraceSingleByObjectType(
+		OUT Hit,
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParameters
+	);
+
+	/// Log name of any object that was hit
+	FString hitName;
+	if (hitFound) {
+		hitName = Hit.GetActor()->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("Currently hitting: %s"), *hitName);
+
+	}
 
 	// Return what the ray collides with
 

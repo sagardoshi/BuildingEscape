@@ -71,6 +71,7 @@ void UGrabber::GrabPress() {
 void UGrabber::GrabRelease() {
     UE_LOG(LogTemp, Warning, TEXT("Grab released."));
     // Release physics handle
+    PhysicsHandle->ReleaseComponent();
 }
 
 /// Called every frame

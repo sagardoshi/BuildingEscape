@@ -18,6 +18,11 @@ private:
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
     UInputComponent* InputComponent = nullptr;
     UPrimitiveComponent* ComponentToGrab = nullptr;
+
+    /// Attributes and method to update location & rotation
+    FVector PlayerViewPointLocation;
+    FRotator PlayerViewPointRotation;
+    void SetViewPoint();
     
     // Ray-cast and grab what's in reach
     void GrabPress();
@@ -25,10 +30,13 @@ private:
     
     // Set up physics and inputs;
     void FindPhysicsHandleComponent();
-    void SetUpInputComponent();
+    void SetInputComponent();
     
-    // Return hit for first physics body in reach
+    // Reach out from player location and detect what's in reach
+    FVector LineTraceEnd;
+    void SetLineTrace();
     const FHitResult GetFirstPhysicsBodyInReach();
+   
     
 
 protected:

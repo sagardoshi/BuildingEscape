@@ -2,9 +2,11 @@
 
 #include "OpenDoor.h"
 #include "GameFramework/Actor.h"
+#include "Components/PrimitiveComponent.h"
 
+#define OUT
 
-// Sets default values for this component's properties
+/// Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
@@ -13,14 +15,10 @@ UOpenDoor::UOpenDoor()
 
 }
 
-
-// Called when the game starts
+/// Called when the game starts
 void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// From scene, saves pointer to player's current body into ActorThatOpens
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 
 	// Establishes owner and default door angles at start
 	Owner = GetOwner();
@@ -37,22 +35,35 @@ void UOpenDoor::CloseDoor() {
 }
 
 
-// Called every frame
+/// Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	float Now = GetWorld()->GetTimeSeconds();
 
-
 	// If PressurePlate pressed, then open
-	if (PressurePlate && PressurePlate->IsOverlappingActor(ActorThatOpens)) {
+	if (PressurePlate && GetTotalMassOfActorsOnPlate() > 30.f) {
 		OpenDoor();
 		LastDoorOpenTime = Now;
 	}
 
 	// If PressurePlate left, then close
-	if (Now > (LastDoorOpenTime + DoorCloseDelay)) {
-		CloseDoor();
-	}
+	if (Now > (LastDoorOpenTime + DoorCloseDelay)) CloseDoor();
+}
+
+float UOpenDoor::GetTotalMassOfActorsOnPlate() {
+    float TotalMass = 0.f;
+    
+    // Find all overlapping actors
+    TArray<AActor*> OverlappingActors;
+    PressurePlate->GetOverlappingActors(OUT OverlappingActors);
+    
+    // Iterate through and add actors
+    for (const AActor* CurrentActor: OverlappingActors) {
+        TotalMass += CurrentActor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+        UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *CurrentActor->GetName())
+    }
+    
+    return TotalMass;
 }

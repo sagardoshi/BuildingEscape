@@ -14,6 +14,31 @@ class BUILDINGESCAPE_API UOpenDoor : public UActorComponent
 {
 	GENERATED_BODY()
 
+private:
+    // Applying macros to private attributes
+    
+    UPROPERTY(EditAnywhere)
+    float AngleAjar = -90.0f;
+    
+    UPROPERTY(EditAnywhere)
+    ATriggerVolume* PressurePlate;
+    
+    UPROPERTY(EditAnywhere)
+    float DoorCloseDelay = 0.125f;
+    
+//    UPROPERTY(EditAnywhere)
+//    float TriggerMass = 50.0f;
+    
+    // Non-macro attributes
+    float OpenAngle;
+    float CloseAngle;
+    float LastDoorOpenTime;
+    
+    AActor* Owner; // Owning door
+    
+    // Key for puzzle - table + chair needed
+    float GetTotalMassOfActorsOnPlate();
+    
 public:
 	// Sets default values for this component's properties
 	UOpenDoor();
@@ -27,26 +52,6 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-private:
-	// Applying macros to private attributes
-
-	UPROPERTY(EditAnywhere)
-	float AngleAjar = -90.0f;
-
-	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate;
-
-	UPROPERTY(EditAnywhere)
-	float DoorCloseDelay = 0.125f;
-
-	// Non-macro attributes
-	float OpenAngle;
-	float CloseAngle;
-	float LastDoorOpenTime;
-
-	AActor* ActorThatOpens; // Remember: Pawn is child of Actor
-	AActor* Owner; // Owning door
 
 
 };

@@ -55,6 +55,7 @@ void UGrabber::GrabPress() {
     
     // If we hit something; attach a physics handle
     if (ActorHit) {
+        if (!PhysicsHandle || !ComponentToGrab) return; // memory leak protection
         PhysicsHandle->GrabComponentAtLocationWithRotation(
                                      ComponentToGrab,
                                      NAME_None, // No bones about it
@@ -66,6 +67,7 @@ void UGrabber::GrabPress() {
 
 /// Drops held object
 void UGrabber::GrabRelease() {
+    if (!PhysicsHandle) return; // memory leak protection
     PhysicsHandle->ReleaseComponent();
 }
     
@@ -113,6 +115,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType,
     SetLineTrace();
     
     // If physics handle attached, move object we are holding
+    if (!PhysicsHandle) return; // memory leak protection
     if (PhysicsHandle->GrabbedComponent) PhysicsHandle->SetTargetLocation(LineTraceEnd);
 }
 

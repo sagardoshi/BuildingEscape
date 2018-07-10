@@ -7,8 +7,6 @@
 #include "MyTriggerBox.h"
 #include "Engine.h"
 #include "DrawDebugHelpers.h"
-#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-
 
 
 AMyTriggerBox::AMyTriggerBox()
@@ -23,9 +21,6 @@ void AMyTriggerBox::BeginPlay()
     
     DrawDebugBox(GetWorld(), GetActorLocation(), GetComponentsBoundingBox().GetExtent(), FColor::Purple, true, -1, 0, 5);
     
-    FString CurrentMapName = GetWorld()->GetMapName();
-    print(EncounterLevelName.ToString());
-    print(CurrentMapName);
     
 }
 
@@ -35,9 +30,7 @@ void AMyTriggerBox::OnOverlapBegin(class AActor* OverlappedActor, class AActor* 
     {
         print("Overlap Begin");
         printFString("Overlapped Actor = %s", *OverlappedActor->GetName());
-        printFString("Loading level %s", EncounterLevelName);
-        
-        UGameplayStatics::OpenLevel(this, FName(*(GetWorld()->GetMapName())), false);
+
     }
 }
 

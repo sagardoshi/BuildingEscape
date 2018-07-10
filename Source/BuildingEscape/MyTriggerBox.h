@@ -14,9 +14,6 @@ class BUILDINGESCAPE_API AMyTriggerBox : public ATriggerBox
 {
 	GENERATED_BODY()
 
-private:
-    const FName EncounterLevelName = FName(TEXT("2DEncounter"));
-    
 protected:
     virtual void BeginPlay() override;
     

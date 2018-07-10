@@ -2,7 +2,6 @@
 
 #include "EnterNegotiationTrigger.h"
 
-
 // Sets default values for this component's properties
 UEnterNegotiationTrigger::UEnterNegotiationTrigger()
 {
